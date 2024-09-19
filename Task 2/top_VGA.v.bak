@@ -1,0 +1,39 @@
+module top_VGA(color, xCoord, yCoord, plot resetn);
+
+output [2:0]color;
+output [7:0]xCoord;
+output [6:0]yCoord;
+output plot;
+
+input resetn,
+		CLOCK_50;
+
+parameter A = 18'd0;
+
+integer i, j;
+
+reg [17:0]p_state, n_state;
+
+always@(p_state)
+	begin
+		for(i = 0; i < 120; i = i + 1)
+		begin
+			for(j = 0; j < 160; j = j + 1)
+			begin
+				n_state[6:0] = p_state[6:0] + i;
+				n_state[14:7] = p_state[14:7] + j;
+			end
+		end
+	
+	end
+
+always@(posedge CLOCK_50 or negedge resetn)
+	begin
+		if(!resetn)
+			p_state <= A;
+		else
+			p_state <= n_state;		
+	end
+	
+
+endmodule 
